@@ -10,13 +10,13 @@ namespace fluidbox_config {
 
 // Performance/quality. The solver uses fixed-size arrays, so changing this
 // value changes both CPU cost and static RAM use without fragmenting the heap.
-constexpr size_t kParticleCount = 400;
+constexpr size_t kParticleCount = 500;
 constexpr size_t kMaxNeighborPairs = kParticleCount * 32;
 constexpr uint16_t kSimulationHz = 80;
 // A measured frame costs about 32 ms, so 30 Hz is the highest safe initial
 // target once rendering runs independently on the other core.
 constexpr uint16_t kRenderHz = 30;
-constexpr uint16_t kImuHz = 100;
+constexpr uint16_t kImuHz = 200;
 constexpr uint8_t kRenderTaskPriority = 1;
 constexpr uint32_t kRenderTaskStackBytes = 6144;
 

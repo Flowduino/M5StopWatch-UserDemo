@@ -12,7 +12,7 @@ namespace fluidbox_config {
 // value changes both CPU cost and static RAM use without fragmenting the heap.
 constexpr size_t kParticleCount = 400;
 constexpr size_t kMaxNeighborPairs = kParticleCount * 32;
-constexpr uint16_t kSimulationHz = 40;
+constexpr uint16_t kSimulationHz = 80;
 // A measured frame costs about 32 ms, so 30 Hz is the highest safe initial
 // target once rendering runs independently on the other core.
 constexpr uint16_t kRenderHz = 30;
@@ -29,7 +29,7 @@ constexpr int kGridZ = 2;
 // Keep these coupled values together and change one category per measurement.
 constexpr float kRestSpacing = 27.0f;
 constexpr float kSmoothingRadius = 45.0f;
-constexpr float kTimeScale = 0.085f;
+constexpr float kTimeScale = 0.170f;
 constexpr float kMaxScaledDt = 0.0022f;
 constexpr float kPressure = 400000.0f;
 constexpr float kNearPressure = 800000.0f;

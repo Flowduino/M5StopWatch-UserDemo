@@ -56,6 +56,11 @@ constexpr float kShakeAccelerationPerG = 90000.0f;
 constexpr float kGravityLowPassHz = 1.2f;
 constexpr float kRotationGain = 0.65f;
 
+// Touch interaction. A tap applies a one-shot radial impulse to particles
+// whose projected screen position falls within this radius.
+constexpr float kTouchRadius = 72.0f;
+constexpr float kTouchForce = 5000.0f;
+
 // The official M5StopWatch demo swaps BMI270 X/Y when exposing display axes.
 // These switches make real-device correction possible without solver edits.
 // The shipping StopWatch HAL already swaps BMI270 X/Y into display axes.
@@ -93,6 +98,8 @@ static_assert(kGridX > 0 && kGridY > 0 && kGridZ > 0,
               "grid dimensions must be non-zero");
 static_assert(kSmoothingRadius > 0.0f && kRestSpacing > 0.0f,
               "solver radii must be positive");
+static_assert(kTouchRadius > 0.0f && kTouchForce >= 0.0f,
+              "touch interaction values must be non-negative and use a positive radius");
 static_assert(kBoxDepth > 2.0f * kWallMargin,
               "virtual depth must leave usable interior space");
 static_assert(kDepthLevels > 1 && kSpeedLevels > 1,

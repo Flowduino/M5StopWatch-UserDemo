@@ -37,9 +37,11 @@ private:
     int64_t _next_simulation_micros = 0;
     int64_t _next_render_micros = 0;
     int64_t _last_imu_micros = 0;
+    bool _touch_down = false;
 
     static void renderTaskEntry(void* arg);
     void renderLoop();
     void renderFrame();
     void updateImu(int64_t nowMicros);
+    void updateTouch();
 };

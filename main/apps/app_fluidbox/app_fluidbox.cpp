@@ -67,6 +67,7 @@ void AppFluidBox::onOpen()
     _next_simulation_micros = now;
     _next_render_micros = now;
     _last_imu_micros = 0;
+    _touch_down = false;
 
     _render_stopped = xSemaphoreCreateBinary();
     _render_running.store(_fluid_ready);
@@ -105,6 +106,8 @@ void AppFluidBox::onRunning()
     if (event == input::KeyEvent::GoNext && _fluid_ready) {
         _fluid->reset();
     }
+
+    updateTouch();
 
     int64_t now = esp_timer_get_time();
 
@@ -146,6 +149,7 @@ void AppFluidBox::onClose()
     }
 
     _fluid_ready = false;
+    _touch_down = false;
     _fluid.reset();
     _key_manager.reset();
 
@@ -237,4 +241,16 @@ void AppFluidBox::updateImu(int64_t nowMicros)
         imu.gyroY,
         imu.gyroZ,
         dt);
+}
+
+void AppFluidBox::updateTouch()
+{
+    const auto touch = GetHAL().getTouchPoint();
+    const bool touch_down = touch.num > 0 && touch.x >= 0 && touch.y >= 0;
+
+    if (touch_down && !_touch_down && _fluid_ready) {
+        _fluid->applyTouchImpulse(static_cast<float>(touch.x), static_cast<float>(touch.y));
+    }
+
+    _touch_down = touch_down;
 }

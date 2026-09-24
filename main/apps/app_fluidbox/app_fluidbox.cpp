@@ -27,9 +27,7 @@ AppFluidBox::AppFluidBox()
 {
     setAppInfo().name = "FluidBox";
 
-    // Reuse the existing motion/IMU icon for now; FluidBox is IMU-driven.
-    // A dedicated FluidBox asset can replace this without changing app logic.
-    setAppInfo().icon = (void*)&icon_imu;
+    setAppInfo().icon = (void*)&fluidbox_icon;
 }
 
 void AppFluidBox::onCreate()

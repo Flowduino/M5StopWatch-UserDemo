@@ -10,12 +10,12 @@ namespace fluidbox_config {
 
 // Performance/quality. The solver uses fixed-size arrays, so changing this
 // value changes both CPU cost and static RAM use without fragmenting the heap.
-constexpr size_t kParticleCount = 500;
+constexpr size_t kParticleCount = 450;
 constexpr size_t kMaxNeighborPairs = kParticleCount * 32;
 constexpr uint16_t kSimulationHz = 80;
 // A measured frame costs about 32 ms, so 30 Hz is the highest safe initial
 // target once rendering runs independently on the other core.
-constexpr uint16_t kRenderHz = 30;
+constexpr uint16_t kRenderHz = 25;
 constexpr uint16_t kImuHz = 200;
 constexpr uint8_t kRenderTaskPriority = 1;
 constexpr uint32_t kRenderTaskStackBytes = 6144;
@@ -58,8 +58,8 @@ constexpr float kRotationGain = 0.65f;
 
 // Touch interaction. A tap applies a one-shot radial impulse to particles
 // whose projected screen position falls within this radius.
-constexpr float kTouchRadius = 72.0f;
-constexpr float kTouchForce = 5000.0f;
+constexpr float kTouchRadius = 142.0f;
+constexpr float kTouchForce = 6000.0f;
 constexpr uint16_t kTouchVibrationDurationMs = 45;
 constexpr uint8_t kTouchVibrationStrength = 70;
 

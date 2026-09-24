@@ -39,6 +39,7 @@ class FluidBox {
   void setImuSample(float ax, float ay, float az,
                     float gx, float gy, float gz,
                     float sampleDtSeconds);
+  bool applyTouchImpulse(float screenX, float screenY);
   void step(float realDtSeconds);
 
   // The caller owns startWrite()/endWrite() so one complete fluid frame is

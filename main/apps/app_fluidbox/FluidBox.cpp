@@ -242,6 +242,64 @@ void FluidBox::setImuSample(float ax, float ay, float az,
   imuActive_ = true;
 }
 
+bool FluidBox::applyTouchImpulse(float screenX, float screenY) {
+  if (!isfinite(screenX) || !isfinite(screenY) ||
+      cfg::kTouchForce <= 0.0f || cfg::kTouchRadius <= 0.0f) {
+    return false;
+  }
+
+  const float radiusSquared = cfg::kTouchRadius * cfg::kTouchRadius;
+  bool affected = false;
+
+  for (size_t i = 0; i < cfg::kParticleCount; ++i) {
+    Particle& p = particles_[i];
+    const float scale = cfg::kProjectionFocal /
+                        (cfg::kProjectionFocal + p.position.z);
+    if (scale <= 1.0e-4f) {
+      continue;
+    }
+
+    const float projectedX = centerX_ + (p.position.x - centerX_) * scale;
+    const float projectedY = centerY_ + (p.position.y - centerY_) * scale;
+    const float dx = projectedX - screenX;
+    const float dy = projectedY - screenY;
+    const float distanceSquared = dx * dx + dy * dy;
+
+    if (distanceSquared >= radiusSquared) {
+      continue;
+    }
+
+    const float distance = sqrtf(distanceSquared);
+    float directionX = 0.0f;
+    float directionY = 0.0f;
+
+    if (distance > 1.0e-3f) {
+      const float inverseDistance = 1.0f / distance;
+      directionX = dx * inverseDistance;
+      directionY = dy * inverseDistance;
+    } else {
+      // Exact overlap is rare, but give coincident particles deterministic
+      // radial directions instead of leaving them stationary.
+      const float angle = static_cast<float>(i) * 2.39996323f;
+      directionX = cosf(angle);
+      directionY = sinf(angle);
+    }
+
+    const float normalizedDistance = distance / cfg::kTouchRadius;
+    const float falloff = 1.0f - normalizedDistance;
+    const float impulse = cfg::kTouchForce * falloff * falloff;
+
+    // Compensate for perspective so the visible screen-space response is
+    // reasonably consistent for particles at different depths.
+    const float worldImpulse = impulse / scale;
+    p.velocity.x += directionX * worldImpulse;
+    p.velocity.y += directionY * worldImpulse;
+    affected = true;
+  }
+
+  return affected;
+}
+
 int FluidBox::cellIndexFor(const Vec3& position) const {
   int cx = static_cast<int>(position.x * cfg::kGridX / static_cast<float>(width_));
   int cy = static_cast<int>(position.y * cfg::kGridY / static_cast<float>(height_));

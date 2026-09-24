@@ -302,7 +302,7 @@ static void lvgl_rtos_task(void *pvParameter)
             }
             xSemaphoreGive(xGuiSemaphore);
         }
-        vTaskDelay(pdMS_TO_TICKS(10));
+        vTaskDelay(pdMS_TO_TICKS(2));
     }
 }
 

@@ -249,7 +249,12 @@ void AppFluidBox::updateTouch()
     const bool touch_down = touch.num > 0 && touch.x >= 0 && touch.y >= 0;
 
     if (touch_down && !_touch_down && _fluid_ready) {
-        _fluid->applyTouchImpulse(static_cast<float>(touch.x), static_cast<float>(touch.y));
+        const bool displaced =
+            _fluid->applyTouchImpulse(static_cast<float>(touch.x), static_cast<float>(touch.y));
+        if (displaced && cfg::kTouchVibrationDurationMs > 0 &&
+            cfg::kTouchVibrationStrength > 0) {
+            GetHAL().vibrate(cfg::kTouchVibrationDurationMs, cfg::kTouchVibrationStrength);
+        }
     }
 
     _touch_down = touch_down;

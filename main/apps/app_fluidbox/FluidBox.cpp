@@ -242,13 +242,14 @@ void FluidBox::setImuSample(float ax, float ay, float az,
   imuActive_ = true;
 }
 
-void FluidBox::applyTouchImpulse(float screenX, float screenY) {
+bool FluidBox::applyTouchImpulse(float screenX, float screenY) {
   if (!isfinite(screenX) || !isfinite(screenY) ||
       cfg::kTouchForce <= 0.0f || cfg::kTouchRadius <= 0.0f) {
-    return;
+    return false;
   }
 
   const float radiusSquared = cfg::kTouchRadius * cfg::kTouchRadius;
+  bool affected = false;
 
   for (size_t i = 0; i < cfg::kParticleCount; ++i) {
     Particle& p = particles_[i];
@@ -293,7 +294,10 @@ void FluidBox::applyTouchImpulse(float screenX, float screenY) {
     const float worldImpulse = impulse / scale;
     p.velocity.x += directionX * worldImpulse;
     p.velocity.y += directionY * worldImpulse;
+    affected = true;
   }
+
+  return affected;
 }
 
 int FluidBox::cellIndexFor(const Vec3& position) const {

@@ -60,6 +60,8 @@ constexpr float kRotationGain = 0.65f;
 // whose projected screen position falls within this radius.
 constexpr float kTouchRadius = 72.0f;
 constexpr float kTouchForce = 5000.0f;
+constexpr uint16_t kTouchVibrationDurationMs = 45;
+constexpr uint8_t kTouchVibrationStrength = 70;
 
 // The official M5StopWatch demo swaps BMI270 X/Y when exposing display axes.
 // These switches make real-device correction possible without solver edits.
@@ -100,6 +102,8 @@ static_assert(kSmoothingRadius > 0.0f && kRestSpacing > 0.0f,
               "solver radii must be positive");
 static_assert(kTouchRadius > 0.0f && kTouchForce >= 0.0f,
               "touch interaction values must be non-negative and use a positive radius");
+static_assert(kTouchVibrationStrength <= 100,
+              "touch vibration strength must be between 0 and 100");
 static_assert(kBoxDepth > 2.0f * kWallMargin,
               "virtual depth must leave usable interior space");
 static_assert(kDepthLevels > 1 && kSpeedLevels > 1,

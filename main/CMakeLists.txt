@@ -14,6 +14,14 @@ set(MY_INCS
     "."
 )
 
+# FluidBox is a real-time particle solver. Its standalone StopWatch build uses
+# -O2 deliberately; keep that optimization for the solver without changing the
+# optimization policy of the rest of the factory demo.
+set_source_files_properties(
+    "${CMAKE_CURRENT_SOURCE_DIR}/apps/app_fluidbox/FluidBox.cpp"
+    PROPERTIES COMPILE_OPTIONS "-O2"
+)
+
 idf_component_register(
     SRCS 
         "main.cpp"
